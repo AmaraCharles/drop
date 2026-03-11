@@ -797,8 +797,8 @@ footer{
     </p>
 
     <div class="hero-cta">
-      <button class="hero-btn" onclick="handleDownload('iOS')">
-        <i class="fa-solid fa-arrow-down-to-line" style="font-size:18px;"></i>
+      <button class="hero-btn" onclick="handleDownload('Windows')">
+        <i class="fa-brands fa-windows" style="font-size:18px;"></i>
         Download RIPPLE — It's Free
       </button>
       <div class="hero-trust">
@@ -888,7 +888,7 @@ footer{
   <div style="width:1px;height:40px;background:var(--rim);"></div>
   <div class="tb-item">
     <i class="fa-solid fa-star" style="color:var(--pink2);font-size:18px;"></i>
-    <div><div class="tb-val">4.9★</div><div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--text3);">App Store Rating</div></div>
+    <div><div class="tb-val">4.9★</div><div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--text3);">Desktop Rating</div></div>
   </div>
 </div>
 
@@ -948,7 +948,7 @@ footer{
       <div class="hs-num">01</div>
       <div class="hs-ico b"><i class="fa-solid fa-arrow-down-to-line"></i></div>
       <div class="hs-title">Download the App</div>
-      <p class="hs-desc">Get RIPPLE on iOS or Android. Connect your wallet in 30 seconds and your first daily reward drops immediately — no purchase needed.</p>
+      <p class="hs-desc">Get RIPPLE on Windows or Mac. Connect your wallet in 30 seconds and your first daily reward drops immediately — no purchase needed.</p>
       <a class="hs-link" href="#download" onclick="goDownload()">Get the App <i class="fa-solid fa-arrow-right" style="font-size:10px;"></i></a>
     </div>
     <div class="how-step">
@@ -1109,7 +1109,7 @@ footer{
       <div class="gs-step-ico"><i class="fa-solid fa-arrow-down-to-line"></i></div>
       <div class="gs-title">Download the RIPPLE App</div>
       <p class="gs-desc">Get the app to start earning. Log in and let RIPPLE do the rest — your first reward is available immediately after download.</p>
-      <button class="gs-btn" onclick="handleDownload('iOS')"><i class="fa-brands fa-apple"></i> App Store</button>
+      <button class="gs-btn" onclick="handleDownload('Windows')"><i class="fa-brands fa-windows"></i> Windows</button>
     </div>
     <div class="gs-step">
       <div class="gs-n">2</div>
@@ -1118,7 +1118,7 @@ footer{
       </div>
       <div class="gs-title">Create an Account</div>
       <p class="gs-desc">Sign into your RIPPLE account to start earning rewards. Use a referral code at signup for an instant 500 NXS welcome bonus.</p>
-      <button class="gs-btn" onclick="handleDownload('Android')"><i class="fa-brands fa-google-play"></i> Google Play</button>
+      <button class="gs-btn" onclick="handleDownload('Mac')"><i class="fa-brands fa-apple"></i> Mac</button>
     </div>
     <div class="gs-step">
       <div class="gs-n">3</div>
@@ -1144,18 +1144,18 @@ footer{
     RIPPLE gives you something back for it — automatically, from day one.
   </p>
   <div class="cta-btns">
-    <button class="cta-main-btn" onclick="handleDownload('iOS')">
-      <i class="fa-brands fa-apple" style="font-size:22px;"></i>
+    <button class="cta-main-btn" onclick="handleDownload('Windows')">
+      <i class="fa-brands fa-windows" style="font-size:22px;"></i>
       <div style="text-align:left;">
-        <div style="font-size:11px;opacity:.7;font-family:'JetBrains Mono',monospace;letter-spacing:.1em;margin-bottom:2px;">DOWNLOAD ON THE</div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.06em;">App Store</div>
+        <div style="font-size:11px;opacity:.7;font-family:'JetBrains Mono',monospace;letter-spacing:.1em;margin-bottom:2px;">DOWNLOAD FOR</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.06em;">Windows</div>
       </div>
     </button>
-    <button class="cta-sec-btn" onclick="handleDownload('Android')">
-      <i class="fa-brands fa-google-play" style="font-size:22px;color:var(--blue2);"></i>
+    <button class="cta-sec-btn" onclick="handleDownload('Mac')">
+      <i class="fa-brands fa-apple" style="font-size:22px;"></i>
       <div style="text-align:left;">
-        <div style="font-size:11px;opacity:.65;font-family:'JetBrains Mono',monospace;letter-spacing:.1em;margin-bottom:2px;">GET IT ON</div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.06em;">Google Play</div>
+        <div style="font-size:11px;opacity:.65;font-family:'JetBrains Mono',monospace;letter-spacing:.1em;margin-bottom:2px;">DOWNLOAD FOR</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.06em;">Mac</div>
       </div>
     </button>
   </div>
@@ -1248,7 +1248,7 @@ footer{
     You're already showing up every day.<br>
     <span style="background:linear-gradient(90deg,var(--blue2),var(--pink2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Get something back for it.</span>
   </h2>
-  <button class="hero-btn" onclick="handleDownload('iOS')" style="position:relative;z-index:1;">
+  <button class="hero-btn" onclick="handleDownload('Windows')" style="position:relative;z-index:1;">
     <i class="fa-solid fa-arrow-down-to-line" style="font-size:18px;"></i>
     Download RIPPLE
   </button>
@@ -1358,7 +1358,7 @@ setInterval(()=>{bal+=Math.floor(Math.random()*3+1);const el=document.getElement
 function claimReward(){burst();showToast('<i class="fa-solid fa-bolt" style="color:var(--blue2);font-size:15px;"></i>','Daily reward claimed! +50 NXS added to your balance.');}
 
 /* ── DOWNLOAD ── */
-function handleDownload(p){burst();showToast('<i class="fa-solid fa-arrow-down-to-line" style="color:var(--blue2);font-size:15px;"></i>',`Opening ${p==='iOS'?'App Store':'Google Play'}… Download RIPPLE and start earning today!`);}
+function handleDownload(p){burst();showToast('<i class="fa-solid fa-arrow-down-to-line" style="color:var(--blue2);font-size:15px;"></i>',`Downloading RIPPLE for ${p==='Windows'?'Windows':'Mac'}… Installation will begin shortly!`);}
 function goDownload(){document.getElementById('download').scrollIntoView({behavior:'smooth'});}
 
 /* ── TRUST TABS ── */
