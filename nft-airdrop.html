@@ -1,0 +1,1651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NΞXUS — Genesis Airdrop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════ TOKENS ═══════════════ */
+:root {
+  --void:      #03040f;
+  --deep:      #060818;
+  --navy:      #0a0d24;
+  --panel:     #0f1230;
+  --card:      #121535;
+  --rim:       rgba(100,120,255,.12);
+  --rim2:      rgba(236,72,153,.1);
+
+  --blue:      #3b82f6;
+  --blue-2:    #60a5fa;
+  --blue-3:    #93c5fd;
+  --electric:  #4f8eff;
+  --ultrablue: #6366f1;
+  --glow-b:    rgba(59,130,246,.22);
+  --glow-b2:   rgba(99,102,241,.3);
+
+  --pink:      #ec4899;
+  --pink-2:    #f472b6;
+  --pink-3:    #fbcfe8;
+  --glow-p:    rgba(236,72,153,.2);
+
+  --text:      #f0f4ff;
+  --text-2:    #a0aecf;
+  --text-3:    #5a6a9a;
+
+  --ff-display: 'Bebas Neue', sans-serif;
+  --ff-body:    'Outfit', sans-serif;
+  --ff-mono:    'JetBrains Mono', monospace;
+}
+
+/* ═══════════════ RESET ═══════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:var(--ff-body);
+  background:var(--void);
+  color:var(--text);
+  overflow-x:hidden;
+  cursor:none;
+}
+a{color:inherit;text-decoration:none;}
+
+/* ═══════════════ CURSOR ═══════════════ */
+.cursor{
+  position:fixed;width:12px;height:12px;border-radius:50%;
+  background:var(--pink);pointer-events:none;z-index:9999;
+  transform:translate(-50%,-50%);transition:transform .1s;
+  mix-blend-mode:screen;
+}
+.cursor-ring{
+  position:fixed;width:36px;height:36px;border-radius:50%;
+  border:1px solid rgba(99,102,241,.6);pointer-events:none;z-index:9998;
+  transform:translate(-50%,-50%);transition:all .18s ease;
+}
+
+/* ═══════════════ CANVAS BG ═══════════════ */
+#bgCanvas{
+  position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.7;
+}
+
+/* ═══════════════ NOISE OVERLAY ═══════════════ */
+body::after{
+  content:'';position:fixed;inset:0;z-index:1;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity:.4;
+}
+
+/* ═══════════════ LAYOUT ═══════════════ */
+.wrapper{position:relative;z-index:2;}
+
+/* ═══════════════ NAV ═══════════════ */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 48px;
+  background:linear-gradient(to bottom, rgba(3,4,15,.9), transparent);
+  backdrop-filter:blur(12px);
+}
+.nav-logo{
+  font-family:var(--ff-display);
+  font-size:28px;letter-spacing:.08em;
+  background:linear-gradient(135deg,var(--blue-2),var(--pink-2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.nav-links{display:flex;align-items:center;gap:36px;}
+.nav-links a{
+  font-family:var(--ff-mono);font-size:11px;font-weight:400;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--text-2);
+  transition:color .2s;
+}
+.nav-links a:hover{color:var(--blue-2);}
+.nav-cta{
+  font-family:var(--ff-mono);font-size:11px;font-weight:500;
+  letter-spacing:.14em;text-transform:uppercase;
+  border:1px solid var(--pink);color:var(--pink);
+  padding:9px 22px;border-radius:4px;
+  background:rgba(236,72,153,.06);
+  transition:all .2s;cursor:none;
+}
+.nav-cta:hover{background:var(--pink);color:#fff;}
+
+/* ═══════════════ HERO ═══════════════ */
+.hero{
+  min-height:100vh;
+  display:flex;flex-direction:column;justify-content:center;align-items:center;
+  text-align:center;padding:120px 24px 80px;
+  position:relative;overflow:hidden;
+}
+
+/* big radial blobs */
+.hero::before{
+  content:'';position:absolute;
+  top:-20%;left:50%;transform:translateX(-50%);
+  width:900px;height:900px;border-radius:50%;
+  background:radial-gradient(ellipse at 50% 40%,
+    rgba(59,130,246,.18) 0%,
+    rgba(99,102,241,.1) 40%,
+    transparent 70%);
+  pointer-events:none;
+}
+.hero::after{
+  content:'';position:absolute;
+  bottom:-10%;right:-5%;
+  width:600px;height:600px;border-radius:50%;
+  background:radial-gradient(circle,rgba(236,72,153,.12) 0%,transparent 65%);
+  pointer-events:none;
+}
+
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--ff-mono);font-size:10px;font-weight:400;
+  letter-spacing:.22em;text-transform:uppercase;
+  color:var(--pink-2);margin-bottom:28px;
+  border:1px solid rgba(236,72,153,.25);
+  padding:7px 18px;border-radius:2px;
+  background:rgba(236,72,153,.05);
+}
+.hero-eyebrow span{
+  width:5px;height:5px;border-radius:50%;background:var(--pink);
+  animation:blink 1.4s ease-in-out infinite;
+}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.2;}}
+
+.hero-title{
+  font-family:var(--ff-display);
+  font-size:clamp(72px,12vw,160px);
+  letter-spacing:.04em;
+  line-height:.95;
+  margin-bottom:8px;
+  background:linear-gradient(170deg,#fff 0%,var(--blue-3) 40%,var(--blue) 70%,var(--pink) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+  animation:titleIn 1s cubic-bezier(.22,.68,0,1.2) both;
+}
+@keyframes titleIn{from{opacity:0;transform:translateY(40px);}to{opacity:1;transform:none;}}
+
+.hero-title-row2{
+  display:block;
+  font-family:var(--ff-display);
+  font-size:clamp(72px,12vw,160px);
+  letter-spacing:.04em;
+  line-height:.95;
+  margin-bottom:32px;
+  color:transparent;
+  -webkit-text-stroke:1px rgba(100,150,255,.4);
+  animation:titleIn 1s .15s cubic-bezier(.22,.68,0,1.2) both;
+}
+
+.hero-sub{
+  font-size:18px;font-weight:300;color:var(--text-2);
+  max-width:540px;line-height:1.75;margin-bottom:52px;
+  animation:fadeUp .8s .3s both;
+}
+.hero-sub strong{color:var(--blue-2);font-weight:600;}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:none;}}
+
+/* ── HERO ACTIONS ── */
+.hero-actions{
+  display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:center;
+  animation:fadeUp .8s .45s both;
+}
+
+.btn-primary-hero{
+  position:relative;overflow:hidden;
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:var(--ff-mono);font-size:12px;font-weight:500;
+  letter-spacing:.14em;text-transform:uppercase;
+  background:linear-gradient(135deg,var(--blue),var(--ultrablue));
+  color:#fff;border:none;padding:16px 36px;
+  border-radius:4px;cursor:none;
+  box-shadow:0 0 40px rgba(59,130,246,.35),0 0 80px rgba(59,130,246,.12);
+  transition:all .25s;
+}
+.btn-primary-hero::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,var(--pink),var(--blue));
+  opacity:0;transition:opacity .3s;
+}
+.btn-primary-hero:hover{
+  transform:translateY(-2px);
+  box-shadow:0 0 60px rgba(59,130,246,.5),0 0 120px rgba(236,72,153,.15);
+}
+.btn-primary-hero:hover::before{opacity:.4;}
+.btn-primary-hero span{position:relative;z-index:1;}
+.btn-primary-hero .btn-icon{position:relative;z-index:1;font-size:16px;transition:transform .2s;}
+.btn-primary-hero:hover .btn-icon{transform:translateY(2px);}
+
+.btn-secondary-hero{
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:var(--ff-mono);font-size:12px;font-weight:500;
+  letter-spacing:.14em;text-transform:uppercase;
+  color:var(--blue-2);
+  border:1px solid rgba(59,130,246,.3);
+  padding:16px 36px;border-radius:4px;cursor:none;
+  background:rgba(59,130,246,.05);
+  transition:all .25s;
+}
+.btn-secondary-hero:hover{
+  border-color:var(--blue-2);background:rgba(59,130,246,.1);
+  transform:translateY(-2px);
+}
+
+/* ── COUNTDOWN ── */
+.countdown-wrap{
+  margin-top:60px;text-align:center;
+  animation:fadeUp .8s .6s both;
+}
+.countdown-label{
+  font-family:var(--ff-mono);font-size:9px;letter-spacing:.28em;
+  text-transform:uppercase;color:var(--text-3);margin-bottom:16px;
+}
+.countdown{display:flex;align-items:center;gap:4px;justify-content:center;}
+.count-block{
+  background:var(--panel);
+  border:1px solid var(--rim);
+  border-radius:6px;
+  padding:14px 20px;
+  min-width:78px;text-align:center;
+  position:relative;overflow:hidden;
+}
+.count-block::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--blue),transparent);
+}
+.count-num{
+  font-family:var(--ff-display);font-size:38px;letter-spacing:.04em;
+  color:var(--text);line-height:1;
+  text-shadow:0 0 20px rgba(59,130,246,.5);
+}
+.count-unit{
+  font-family:var(--ff-mono);font-size:9px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--text-3);margin-top:4px;
+}
+.count-sep{
+  font-family:var(--ff-display);font-size:32px;color:var(--blue);
+  opacity:.4;margin-top:-12px;
+}
+
+/* ── SCROLL INDICATOR ── */
+.scroll-hint{
+  position:absolute;bottom:32px;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  font-family:var(--ff-mono);font-size:9px;letter-spacing:.2em;
+  color:var(--text-3);text-transform:uppercase;
+}
+.scroll-line{
+  width:1px;height:48px;
+  background:linear-gradient(to bottom,var(--blue),transparent);
+  animation:scrollDrop 1.6s ease-in-out infinite;
+}
+@keyframes scrollDrop{0%{transform:scaleY(0);transform-origin:top;}50%{transform:scaleY(1);transform-origin:top;}51%{transform:scaleY(1);transform-origin:bottom;}100%{transform:scaleY(0);transform-origin:bottom;}}
+
+/* ═══════════════ STATS BAR ═══════════════ */
+.stats-bar{
+  position:relative;z-index:2;
+  padding:0 48px;
+  margin:-1px 0;
+}
+.stats-inner{
+  display:flex;align-items:stretch;
+  border:1px solid var(--rim);
+  border-radius:8px;
+  background:var(--panel);
+  overflow:hidden;
+  backdrop-filter:blur(20px);
+}
+.stat-item{
+  flex:1;padding:28px 32px;
+  display:flex;flex-direction:column;gap:6px;
+  border-right:1px solid var(--rim);
+  position:relative;overflow:hidden;
+  transition:background .2s;
+}
+.stat-item:last-child{border-right:none;}
+.stat-item::before{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--blue),var(--pink));
+  transform:scaleX(0);transition:transform .3s;transform-origin:left;
+}
+.stat-item:hover::before{transform:scaleX(1);}
+.stat-item:hover{background:rgba(59,130,246,.04);}
+.stat-num{
+  font-family:var(--ff-display);font-size:36px;letter-spacing:.04em;
+  background:linear-gradient(135deg,var(--blue-2),var(--pink-2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.stat-label{
+  font-family:var(--ff-mono);font-size:10px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--text-3);
+}
+.stat-delta{
+  font-family:var(--ff-mono);font-size:10px;color:var(--blue-2);
+  display:flex;align-items:center;gap:4px;
+}
+
+/* ═══════════════ NFT SHOWCASE ═══════════════ */
+.showcase{padding:120px 48px;position:relative;}
+.showcase::before{
+  content:'';position:absolute;top:0;left:0;right:0;bottom:0;
+  background:radial-gradient(ellipse at 20% 50%,rgba(99,102,241,.08) 0%,transparent 60%),
+             radial-gradient(ellipse at 80% 30%,rgba(236,72,153,.06) 0%,transparent 50%);
+  pointer-events:none;
+}
+.section-tag{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--ff-mono);font-size:10px;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--blue-2);margin-bottom:16px;
+}
+.section-tag::before{content:'';width:28px;height:1px;background:var(--blue);}
+.section-heading{
+  font-family:var(--ff-display);
+  font-size:clamp(40px,6vw,80px);
+  letter-spacing:.04em;line-height:1;
+  color:var(--text);margin-bottom:16px;
+}
+.section-heading em{
+  font-style:normal;
+  background:linear-gradient(90deg,var(--blue-2),var(--pink-2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.section-sub{
+  font-size:16px;font-weight:300;color:var(--text-2);
+  max-width:480px;line-height:1.7;margin-bottom:64px;
+}
+
+/* NFT GRID */
+.nft-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:24px;
+}
+.nft-card{
+  position:relative;border-radius:12px;overflow:hidden;
+  background:var(--card);
+  border:1px solid var(--rim);
+  cursor:none;
+  transition:transform .3s cubic-bezier(.22,.68,0,1.2), box-shadow .3s;
+  transform-style:preserve-3d;
+}
+.nft-card:hover{
+  transform:translateY(-8px) scale(1.01);
+  box-shadow:0 24px 60px rgba(0,0,0,.5),
+             0 0 40px rgba(59,130,246,.15),
+             0 0 80px rgba(236,72,153,.08);
+}
+.nft-card.featured{
+  grid-column:1/2;grid-row:1/3;
+}
+.nft-card.featured .nft-img{height:520px;}
+
+/* Holographic shimmer */
+.nft-card::before{
+  content:'';position:absolute;inset:0;z-index:3;pointer-events:none;
+  background:linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255,255,255,.06) 50%,
+    transparent 60%
+  );
+  transform:translateX(-100%);
+  transition:transform .6s;
+}
+.nft-card:hover::before{transform:translateX(100%);}
+
+/* gradient border glow */
+.nft-card::after{
+  content:'';position:absolute;inset:-1px;border-radius:13px;z-index:0;
+  background:linear-gradient(135deg,var(--blue),transparent 50%,var(--pink));
+  opacity:0;transition:opacity .3s;
+}
+.nft-card:hover::after{opacity:.35;}
+
+.nft-img{
+  width:100%;height:260px;object-fit:cover;
+  display:block;position:relative;z-index:1;
+}
+
+/* NFT image placeholder with generative look */
+.nft-img-placeholder{
+  width:100%;height:260px;
+  position:relative;z-index:1;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+}
+.nft-img-placeholder.h-full{height:520px;}
+.nft-art{
+  width:100%;height:100%;
+  display:flex;align-items:center;justify-content:center;
+}
+
+.nft-meta{position:relative;z-index:2;padding:20px;}
+.nft-collection{
+  font-family:var(--ff-mono);font-size:9px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--blue-2);margin-bottom:6px;
+}
+.nft-name{
+  font-family:var(--ff-display);font-size:22px;letter-spacing:.04em;
+  color:var(--text);margin-bottom:4px;
+}
+.nft-id{font-family:var(--ff-mono);font-size:10px;color:var(--text-3);}
+.nft-footer{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-top:14px;padding-top:14px;border-top:1px solid var(--rim);
+}
+.nft-floor-label{font-family:var(--ff-mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-3);}
+.nft-floor-val{
+  font-family:var(--ff-mono);font-size:14px;font-weight:500;
+  color:var(--text);
+}
+.nft-rarity{
+  font-family:var(--ff-mono);font-size:9px;letter-spacing:.12em;
+  text-transform:uppercase;padding:4px 10px;border-radius:2px;
+}
+.nft-rarity.legendary{background:rgba(236,72,153,.12);color:var(--pink-2);border:1px solid rgba(236,72,153,.2);}
+.nft-rarity.rare{background:rgba(59,130,246,.12);color:var(--blue-2);border:1px solid rgba(59,130,246,.2);}
+.nft-rarity.epic{background:rgba(99,102,241,.12);color:#a5b4fc;border:1px solid rgba(99,102,241,.2);}
+
+/* ═══════════════ HOW IT WORKS ═══════════════ */
+.how{padding:120px 48px;position:relative;}
+.steps-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:2px;
+  margin-top:64px;
+  border:1px solid var(--rim);
+  border-radius:10px;
+  overflow:hidden;
+}
+.step-card{
+  background:var(--panel);
+  padding:40px 32px;
+  position:relative;
+  overflow:hidden;
+  transition:background .2s;
+}
+.step-card:hover{background:var(--card);}
+.step-card::before{
+  content:'';position:absolute;
+  top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--blue) 50%,var(--pink),transparent);
+  opacity:0;transition:opacity .3s;
+}
+.step-card:hover::before{opacity:1;}
+.step-num{
+  font-family:var(--ff-display);font-size:64px;letter-spacing:.04em;
+  color:var(--rim);line-height:1;margin-bottom:24px;
+  position:relative;
+}
+.step-num::after{
+  content:attr(data-n);position:absolute;left:0;top:0;
+  background:linear-gradient(135deg,var(--blue),var(--pink));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;opacity:0;transition:opacity .3s;
+}
+.step-card:hover .step-num::after{opacity:1;}
+.step-icon{
+  width:48px;height:48px;border-radius:8px;
+  background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;margin-bottom:20px;
+  transition:background .2s,border-color .2s;
+}
+.step-card:hover .step-icon{
+  background:rgba(236,72,153,.1);border-color:rgba(236,72,153,.2);
+}
+.step-title{
+  font-family:var(--ff-body);font-size:16px;font-weight:600;
+  color:var(--text);margin-bottom:10px;
+}
+.step-desc{font-size:13.5px;font-weight:300;color:var(--text-2);line-height:1.65;}
+
+/* ═══════════════ CLAIM / DOWNLOAD ═══════════════ */
+.claim{
+  padding:80px 48px 120px;
+  position:relative;display:flex;justify-content:center;
+}
+.claim-panel{
+  width:100%;max-width:760px;
+  background:var(--panel);
+  border:1px solid var(--rim);
+  border-radius:16px;
+  overflow:hidden;
+  position:relative;
+}
+.claim-panel::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse at 0% 0%,rgba(59,130,246,.12),transparent 50%),
+    radial-gradient(ellipse at 100% 100%,rgba(236,72,153,.1),transparent 50%);
+  pointer-events:none;
+}
+.claim-top-line{
+  height:2px;
+  background:linear-gradient(90deg,var(--blue),var(--ultrablue) 40%,var(--pink));
+}
+.claim-body{padding:52px 56px;position:relative;z-index:1;}
+.claim-label{
+  font-family:var(--ff-mono);font-size:10px;letter-spacing:.24em;
+  text-transform:uppercase;color:var(--pink-2);margin-bottom:12px;
+  display:flex;align-items:center;gap:8px;
+}
+.claim-label::before{content:'//';opacity:.4;}
+.claim-title{
+  font-family:var(--ff-display);font-size:56px;letter-spacing:.04em;
+  line-height:1;color:var(--text);margin-bottom:8px;
+}
+.claim-sub{
+  font-size:15px;font-weight:300;color:var(--text-2);
+  max-width:420px;line-height:1.7;margin-bottom:40px;
+}
+
+/* wallet input */
+.wallet-row{
+  display:flex;gap:0;margin-bottom:20px;
+}
+.wallet-input{
+  flex:1;background:rgba(10,13,36,.8);
+  border:1px solid var(--rim);border-right:none;
+  border-radius:4px 0 0 4px;
+  font-family:var(--ff-mono);font-size:12px;
+  color:var(--text);padding:14px 18px;
+  outline:none;transition:border-color .2s;
+}
+.wallet-input::placeholder{color:var(--text-3);}
+.wallet-input:focus{border-color:rgba(59,130,246,.5);}
+.wallet-check-btn{
+  background:rgba(59,130,246,.15);
+  border:1px solid rgba(59,130,246,.3);
+  border-radius:0 4px 4px 0;
+  font-family:var(--ff-mono);font-size:11px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--blue-2);
+  padding:14px 22px;cursor:none;
+  transition:all .2s;
+}
+.wallet-check-btn:hover{background:rgba(59,130,246,.25);}
+
+/* eligibility badge */
+.elig-badge{
+  display:none;
+  align-items:center;gap:8px;
+  font-family:var(--ff-mono);font-size:11px;letter-spacing:.1em;
+  padding:10px 16px;border-radius:4px;margin-bottom:24px;
+}
+.elig-badge.show{display:flex;}
+.elig-badge.eligible{background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.2);color:var(--blue-2);}
+.elig-badge.ineligible{background:rgba(236,72,153,.1);border:1px solid rgba(236,72,153,.2);color:var(--pink-2);}
+.elig-dot{width:6px;height:6px;border-radius:50%;}
+.eligible .elig-dot{background:var(--blue-2);}
+.ineligible .elig-dot{background:var(--pink-2);}
+
+/* ── DOWNLOAD BUTTON (hero of the page) ── */
+.download-btn{
+  position:relative;overflow:hidden;
+  display:inline-flex;align-items:center;gap:14px;
+  font-family:var(--ff-mono);font-size:13px;font-weight:500;
+  letter-spacing:.16em;text-transform:uppercase;
+  border:none;border-radius:6px;cursor:none;
+  padding:20px 44px;
+  background:linear-gradient(135deg,var(--blue) 0%,var(--ultrablue) 50%,var(--pink) 100%);
+  color:#fff;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.08),
+    0 8px 32px rgba(59,130,246,.35),
+    0 0 80px rgba(59,130,246,.15);
+  transition:transform .25s cubic-bezier(.22,.68,0,1.2), box-shadow .25s;
+}
+.download-btn::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,.15),transparent 60%);
+  border-radius:6px;
+}
+.download-btn::after{
+  content:'';position:absolute;
+  top:-50%;left:-60%;width:40%;height:200%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent);
+  transform:skewX(-15deg);
+  transition:left .5s;
+}
+.download-btn:hover{
+  transform:translateY(-3px) scale(1.02);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.12),
+    0 16px 48px rgba(59,130,246,.5),
+    0 0 120px rgba(236,72,153,.2);
+}
+.download-btn:hover::after{left:120%;}
+.download-btn:active{transform:translateY(-1px) scale(1);}
+.dl-icon{
+  width:36px;height:36px;border-radius:50%;
+  background:rgba(255,255,255,.15);
+  display:flex;align-items:center;justify-content:center;
+  transition:transform .2s;
+}
+.download-btn:hover .dl-icon{transform:translateY(3px);}
+.dl-text{display:flex;flex-direction:column;gap:2px;text-align:left;}
+.dl-main{font-size:14px;font-weight:600;letter-spacing:.08em;}
+.dl-sub{font-size:9px;font-weight:300;opacity:.7;letter-spacing:.16em;}
+
+.claim-note{
+  margin-top:20px;
+  font-family:var(--ff-mono);font-size:10px;letter-spacing:.1em;
+  color:var(--text-3);line-height:1.6;
+}
+.claim-note span{color:var(--blue-2);}
+
+/* progress bar */
+.airdrop-progress{margin-top:40px;padding-top:40px;border-top:1px solid var(--rim);}
+.progress-header{
+  display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;
+}
+.progress-label{font-family:var(--ff-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-3);}
+.progress-val{font-family:var(--ff-mono);font-size:12px;color:var(--blue-2);}
+.progress-track{
+  height:6px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden;
+}
+.progress-fill{
+  height:100%;border-radius:3px;
+  background:linear-gradient(90deg,var(--blue),var(--pink));
+  width:0%;transition:width 2s cubic-bezier(.22,.68,0,1);
+  box-shadow:0 0 10px rgba(59,130,246,.5);
+}
+
+/* ═══════════════ TOKENOMICS ═══════════════ */
+.tokenomics{padding:80px 48px 120px;}
+.token-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;
+  margin-top:64px;
+}
+.token-info h3{
+  font-family:var(--ff-display);font-size:48px;letter-spacing:.04em;
+  color:var(--text);margin-bottom:6px;
+}
+.token-info h3 span{
+  background:linear-gradient(90deg,var(--blue-2),var(--pink-2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.token-info p{font-size:14px;font-weight:300;color:var(--text-2);line-height:1.75;margin-bottom:32px;}
+.token-rows{display:flex;flex-direction:column;gap:2px;}
+.token-row{
+  display:flex;align-items:center;gap:16px;
+  padding:14px 16px;
+  background:var(--panel);border-radius:6px;
+  transition:background .2s;
+}
+.token-row:hover{background:var(--card);}
+.t-bar-wrap{flex:1;height:4px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden;}
+.t-bar{
+  height:100%;border-radius:2px;
+  transition:width 1.5s cubic-bezier(.22,.68,0,1) .3s;
+}
+.t-bar.blue{background:linear-gradient(90deg,var(--blue),var(--blue-2));}
+.t-bar.pink{background:linear-gradient(90deg,var(--ultrablue),var(--pink));}
+.t-bar.light{background:linear-gradient(90deg,var(--blue-3),var(--blue));}
+.t-bar.faint{background:linear-gradient(90deg,rgba(59,130,246,.4),rgba(59,130,246,.2));}
+.t-label{font-family:var(--ff-mono);font-size:10px;letter-spacing:.1em;color:var(--text-2);min-width:90px;}
+.t-pct{font-family:var(--ff-display);font-size:22px;letter-spacing:.04em;color:var(--text);min-width:52px;text-align:right;}
+
+/* donut chart */
+.token-chart{display:flex;align-items:center;justify-content:center;}
+.donut-wrap{position:relative;width:280px;height:280px;}
+.donut-wrap svg{transform:rotate(-90deg);}
+.donut-center{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  text-align:center;
+}
+.donut-center-num{
+  font-family:var(--ff-display);font-size:42px;letter-spacing:.04em;
+  background:linear-gradient(135deg,var(--blue-2),var(--pink-2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.donut-center-label{font-family:var(--ff-mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--text-3);}
+
+/* ═══════════════ TIMELINE / ROADMAP ═══════════════ */
+.roadmap{padding:80px 48px 120px;position:relative;}
+.timeline{
+  position:relative;margin-top:64px;
+  display:flex;flex-direction:column;gap:0;
+}
+.timeline::before{
+  content:'';position:absolute;
+  left:50%;transform:translateX(-50%);
+  top:0;bottom:0;width:1px;
+  background:linear-gradient(to bottom,var(--blue),var(--pink),transparent);
+}
+.tl-item{
+  display:grid;grid-template-columns:1fr 40px 1fr;
+  align-items:start;gap:0;
+  margin-bottom:48px;
+}
+.tl-item.right .tl-content{grid-column:3;}
+.tl-item.right .tl-empty{grid-column:1;}
+.tl-dot{
+  grid-column:2;
+  width:12px;height:12px;border-radius:50%;
+  background:var(--blue);
+  border:2px solid var(--void);
+  box-shadow:0 0 16px var(--blue);
+  margin-top:16px;justify-self:center;
+}
+.tl-content{
+  background:var(--panel);border:1px solid var(--rim);
+  border-radius:8px;padding:24px 28px;
+  position:relative;transition:border-color .2s, transform .2s;
+}
+.tl-content:hover{border-color:rgba(59,130,246,.3);transform:scale(1.01);}
+.tl-phase{
+  font-family:var(--ff-mono);font-size:9px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--pink-2);margin-bottom:6px;
+}
+.tl-title{
+  font-family:var(--ff-display);font-size:22px;letter-spacing:.04em;
+  color:var(--text);margin-bottom:8px;
+}
+.tl-desc{font-size:13px;font-weight:300;color:var(--text-2);line-height:1.6;}
+.tl-date{
+  font-family:var(--ff-mono);font-size:10px;letter-spacing:.12em;
+  color:var(--text-3);margin-top:10px;
+}
+.tl-item.done .tl-dot{background:var(--pink);box-shadow:0 0 16px var(--pink);}
+.tl-item.done .tl-phase{color:var(--blue-2);}
+.tl-item.active .tl-dot{
+  background:var(--blue-2);
+  box-shadow:0 0 0 4px rgba(59,130,246,.2),0 0 20px var(--blue);
+  animation:pulse 1.6s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 4px rgba(59,130,246,.2),0 0 20px var(--blue);}50%{box-shadow:0 0 0 8px rgba(59,130,246,.1),0 0 40px var(--blue-2);}}
+
+/* ═══════════════ FOOTER ═══════════════ */
+footer{
+  padding:56px 48px;
+  border-top:1px solid var(--rim);
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:24px;
+}
+.footer-logo{
+  font-family:var(--ff-display);font-size:26px;letter-spacing:.08em;
+  background:linear-gradient(135deg,var(--blue-2),var(--pink-2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.footer-links{display:flex;gap:32px;flex-wrap:wrap;}
+.footer-links a{
+  font-family:var(--ff-mono);font-size:10px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--text-3);
+  transition:color .2s;cursor:none;
+}
+.footer-links a:hover{color:var(--blue-2);}
+.footer-copy{
+  font-family:var(--ff-mono);font-size:10px;letter-spacing:.1em;
+  color:var(--text-3);
+}
+
+/* ═══════════════ MODALS / TOAST ═══════════════ */
+.toast{
+  position:fixed;bottom:32px;right:32px;z-index:500;
+  background:var(--card);border:1px solid rgba(59,130,246,.3);
+  border-radius:8px;padding:16px 22px;
+  display:flex;align-items:center;gap:12px;
+  font-family:var(--ff-mono);font-size:12px;color:var(--text);
+  box-shadow:0 8px 32px rgba(0,0,0,.4);
+  transform:translateY(80px);opacity:0;
+  transition:all .4s cubic-bezier(.22,.68,0,1.2);
+  pointer-events:none;max-width:340px;
+}
+.toast.show{transform:translateY(0);opacity:1;pointer-events:all;}
+.toast-icon{font-size:18px;}
+.toast-bar{
+  position:absolute;bottom:0;left:0;height:2px;border-radius:0 0 8px 8px;
+  background:linear-gradient(90deg,var(--blue),var(--pink));
+  width:100%;transform-origin:left;animation:none;
+}
+.toast.show .toast-bar{animation:drainBar 3.5s linear forwards;}
+@keyframes drainBar{from{transform:scaleX(1);}to{transform:scaleX(0);}}
+
+/* ═══════════════ ANIMATIONS ═══════════════ */
+.reveal{
+  opacity:0;transform:translateY(30px);
+  transition:opacity .7s ease, transform .7s cubic-bezier(.22,.68,0,1.2);
+}
+.reveal.visible{opacity:1;transform:none;}
+
+/* ═══════════════ RESPONSIVE ═══════════════ */
+@media(max-width:1024px){
+  nav{padding:16px 24px;}
+  .stats-bar,.showcase,.how,.claim,.tokenomics,.roadmap,footer{padding-left:24px;padding-right:24px;}
+  .nft-grid{grid-template-columns:1fr 1fr;}
+  .nft-card.featured{grid-column:1;grid-row:auto;}
+  .nft-card.featured .nft-img-placeholder{height:260px;}
+  .steps-grid{grid-template-columns:1fr 1fr;}
+  .token-grid{grid-template-columns:1fr;}
+  .timeline::before{left:20px;}
+  .tl-item{grid-template-columns:40px 1fr;gap:0;}
+  .tl-dot{grid-column:1;}
+  .tl-content{grid-column:2;}
+  .tl-item.right .tl-content{grid-column:2;}
+  .tl-item.right .tl-empty{display:none;}
+}
+@media(max-width:640px){
+  .nav-links{display:none;}
+  .nft-grid{grid-template-columns:1fr;}
+  .steps-grid{grid-template-columns:1fr;}
+  .claim-body{padding:32px 24px;}
+  .wallet-row{flex-direction:column;}
+  .wallet-input{border-radius:4px;border-right:1px solid var(--rim);}
+  .wallet-check-btn{border-radius:4px;border-left:1px solid rgba(59,130,246,.3);}
+}
+</style>
+</head>
+<body>
+
+<!-- CUSTOM CURSOR -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- CANVAS BACKGROUND -->
+<canvas id="bgCanvas"></canvas>
+
+<div class="wrapper">
+
+<!-- ═══════════════ NAV ═══════════════ -->
+<nav>
+  <div class="nav-logo">NΞXUS</div>
+  <div class="nav-links">
+    <a href="#showcase">Collection</a>
+    <a href="#how">How it Works</a>
+    <a href="#claim">Claim</a>
+    <a href="#roadmap">Roadmap</a>
+  </div>
+  <button class="nav-cta" onclick="scrollToClaim()">Claim Airdrop</button>
+</nav>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<section class="hero" id="hero">
+  <div class="hero-eyebrow"><span></span> Genesis Airdrop — Round I Live</div>
+
+  <h1 class="hero-title">GENESIS</h1>
+  <span class="hero-title-row2">AIRDROP</span>
+
+  <p class="hero-sub">
+    <strong>10,000 unique NFTs</strong> dropping to verified wallets.
+    Claim your genesis piece and unlock lifetime access to the NΞXUS ecosystem.
+  </p>
+
+  <div class="hero-actions">
+    <button class="btn-primary-hero" onclick="scrollToClaim()">
+      <span>Claim Now</span>
+      <span class="btn-icon">↓</span>
+    </button>
+    <button class="btn-secondary-hero" onclick="document.getElementById('showcase').scrollIntoView({behavior:'smooth'})">
+      View Collection →
+    </button>
+  </div>
+
+  <div class="countdown-wrap">
+    <div class="countdown-label">Airdrop closes in</div>
+    <div class="countdown">
+      <div class="count-block">
+        <div class="count-num" id="cdDays">07</div>
+        <div class="count-unit">Days</div>
+      </div>
+      <div class="count-sep">:</div>
+      <div class="count-block">
+        <div class="count-num" id="cdHours">14</div>
+        <div class="count-unit">Hours</div>
+      </div>
+      <div class="count-sep">:</div>
+      <div class="count-block">
+        <div class="count-num" id="cdMins">33</div>
+        <div class="count-unit">Mins</div>
+      </div>
+      <div class="count-sep">:</div>
+      <div class="count-block">
+        <div class="count-num" id="cdSecs">00</div>
+        <div class="count-unit">Secs</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ═══════════════ STATS BAR ═══════════════ -->
+<div class="stats-bar reveal">
+  <div class="stats-inner">
+    <div class="stat-item">
+      <div class="stat-num" data-target="10000">0</div>
+      <div class="stat-label">Total Supply</div>
+      <div class="stat-delta">↑ Genesis Collection</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num" data-target="6284">0</div>
+      <div class="stat-label">Claimed So Far</div>
+      <div class="stat-delta">↑ 62.8% distributed</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num" data-target="3716">0</div>
+      <div class="stat-label">Remaining</div>
+      <div class="stat-delta">↓ Ends in 7 days</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num" id="floorStat">2.4Ξ</div>
+      <div class="stat-label">Floor Price</div>
+      <div class="stat-delta" style="color:var(--pink-2)">↑ +18% (24h)</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ NFT SHOWCASE ═══════════════ -->
+<section class="showcase reveal" id="showcase">
+  <div class="section-tag">Genesis Collection</div>
+  <h2 class="section-heading">Rare <em>Digital Art</em><br>Drops for Free</h2>
+  <p class="section-sub">Each NΞXUS Genesis NFT is algorithmically generated from 280+ unique traits. No two are alike.</p>
+
+  <div class="nft-grid">
+    <!-- Featured card -->
+    <div class="nft-card featured">
+      <div class="nft-img-placeholder h-full">
+        <canvas class="nft-art" id="nftArt0" width="400" height="520"></canvas>
+      </div>
+      <div class="nft-meta">
+        <div class="nft-collection">NΞXUS Genesis</div>
+        <div class="nft-name">VOID WALKER</div>
+        <div class="nft-id">Token ID #0001</div>
+        <div class="nft-footer">
+          <div>
+            <div class="nft-floor-label">Floor</div>
+            <div class="nft-floor-val">12.4 ETH</div>
+          </div>
+          <div class="nft-rarity legendary">Legendary</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="nft-card">
+      <div class="nft-img-placeholder">
+        <canvas class="nft-art" id="nftArt1" width="400" height="260"></canvas>
+      </div>
+      <div class="nft-meta">
+        <div class="nft-collection">NΞXUS Genesis</div>
+        <div class="nft-name">CYBER SEER</div>
+        <div class="nft-id">Token ID #0042</div>
+        <div class="nft-footer">
+          <div>
+            <div class="nft-floor-label">Floor</div>
+            <div class="nft-floor-val">3.8 ETH</div>
+          </div>
+          <div class="nft-rarity rare">Rare</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="nft-card">
+      <div class="nft-img-placeholder">
+        <canvas class="nft-art" id="nftArt2" width="400" height="260"></canvas>
+      </div>
+      <div class="nft-meta">
+        <div class="nft-collection">NΞXUS Genesis</div>
+        <div class="nft-name">PRISM GHOST</div>
+        <div class="nft-id">Token ID #0117</div>
+        <div class="nft-footer">
+          <div>
+            <div class="nft-floor-label">Floor</div>
+            <div class="nft-floor-val">5.2 ETH</div>
+          </div>
+          <div class="nft-rarity epic">Epic</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="nft-card">
+      <div class="nft-img-placeholder">
+        <canvas class="nft-art" id="nftArt3" width="400" height="260"></canvas>
+      </div>
+      <div class="nft-meta">
+        <div class="nft-collection">NΞXUS Genesis</div>
+        <div class="nft-name">NOVA PULSE</div>
+        <div class="nft-id">Token ID #0289</div>
+        <div class="nft-footer">
+          <div>
+            <div class="nft-floor-label">Floor</div>
+            <div class="nft-floor-val">2.4 ETH</div>
+          </div>
+          <div class="nft-rarity rare">Rare</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 5 -->
+    <div class="nft-card">
+      <div class="nft-img-placeholder">
+        <canvas class="nft-art" id="nftArt4" width="400" height="260"></canvas>
+      </div>
+      <div class="nft-meta">
+        <div class="nft-collection">NΞXUS Genesis</div>
+        <div class="nft-name">DEEP SIGNAL</div>
+        <div class="nft-id">Token ID #0403</div>
+        <div class="nft-footer">
+          <div>
+            <div class="nft-floor-label">Floor</div>
+            <div class="nft-floor-val">2.4 ETH</div>
+          </div>
+          <div class="nft-rarity rare">Rare</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ HOW IT WORKS ═══════════════ -->
+<section class="how reveal" id="how">
+  <div class="section-tag">Process</div>
+  <h2 class="section-heading">Four Steps to<br><em>Your Airdrop</em></h2>
+
+  <div class="steps-grid">
+    <div class="step-card">
+      <div class="step-num" data-n="01">01</div>
+      <div class="step-icon">🔗</div>
+      <div class="step-title">Connect Wallet</div>
+      <div class="step-desc">Link your Ethereum wallet — MetaMask, WalletConnect, or Coinbase Wallet are all supported.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num" data-n="02">02</div>
+      <div class="step-icon">✅</div>
+      <div class="step-title">Verify Eligibility</div>
+      <div class="step-desc">We check your wallet snapshot taken at block #18,450,000. Holders of partner NFTs get guaranteed slots.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num" data-n="03">03</div>
+      <div class="step-icon">⬇️</div>
+      <div class="step-title">Download & Claim</div>
+      <div class="step-desc">Hit the download button to receive your genesis NFT. The claim transaction costs zero gas — we cover it.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num" data-n="04">04</div>
+      <div class="step-icon">🌐</div>
+      <div class="step-title">Unlock Ecosystem</div>
+      <div class="step-desc">Your NFT unlocks staking rewards, governance votes, and early access to all future NΞXUS drops.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ CLAIM / DOWNLOAD ═══════════════ -->
+<section class="claim reveal" id="claim">
+  <div class="claim-panel">
+    <div class="claim-top-line"></div>
+    <div class="claim-body">
+      <div class="claim-label">Airdrop Claim Portal</div>
+      <div class="claim-title">CLAIM YOUR<br>FREE NFT</div>
+      <p class="claim-sub">Enter your wallet address to check eligibility and download your genesis NFT directly.</p>
+
+      <div class="wallet-row">
+        <input class="wallet-input" id="walletInput" type="text" placeholder="0x... Enter your Ethereum wallet address" maxlength="42">
+        <button class="wallet-check-btn" onclick="checkEligibility()">Check →</button>
+      </div>
+
+      <div class="elig-badge" id="eligBadge">
+        <div class="elig-dot"></div>
+        <span id="eligText"></span>
+      </div>
+
+      <!-- ★★★ THE DOWNLOAD BUTTON ★★★ -->
+      <button class="download-btn" id="downloadBtn" onclick="handleDownload()">
+        <div class="dl-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+        </div>
+        <div class="dl-text">
+          <span class="dl-main">Download NFT</span>
+          <span class="dl-sub">Free Mint · Zero Gas Fee</span>
+        </div>
+      </button>
+
+      <p class="claim-note">
+        By claiming you agree to our terms. NFTs are minted on Ethereum mainnet.
+        Gas fees are <span>covered by NΞXUS</span> for all genesis claims.
+        One claim per wallet address.
+      </p>
+
+      <div class="airdrop-progress" id="progressSection">
+        <div class="progress-header">
+          <span class="progress-label">Airdrop Progress</span>
+          <span class="progress-val" id="progressVal">62.8% Claimed</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ TOKENOMICS ═══════════════ -->
+<section class="tokenomics reveal" id="tokenomics">
+  <div class="section-tag">Token Distribution</div>
+  <h2 class="section-heading">NFT <em>Allocation</em><br>Breakdown</h2>
+
+  <div class="token-grid">
+    <div class="token-info">
+      <h3>10,000 <span>Total</span></h3>
+      <p>The genesis collection is distributed across community airdrops, partner rewards, ecosystem treasury, and the founding team with a 24-month vesting schedule.</p>
+      <div class="token-rows">
+        <div class="token-row">
+          <span class="t-label">Community Airdrop</span>
+          <div class="t-bar-wrap"><div class="t-bar blue" style="width:0%" data-w="55%"></div></div>
+          <span class="t-pct">55%</span>
+        </div>
+        <div class="token-row">
+          <span class="t-label">Partner Rewards</span>
+          <div class="t-bar-wrap"><div class="t-bar pink" style="width:0%" data-w="20%"></div></div>
+          <span class="t-pct">20%</span>
+        </div>
+        <div class="token-row">
+          <span class="t-label">Ecosystem Fund</span>
+          <div class="t-bar-wrap"><div class="t-bar light" style="width:0%" data-w="15%"></div></div>
+          <span class="t-pct">15%</span>
+        </div>
+        <div class="token-row">
+          <span class="t-label">Team (vested)</span>
+          <div class="t-bar-wrap"><div class="t-bar faint" style="width:0%" data-w="10%"></div></div>
+          <span class="t-pct">10%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="token-chart">
+      <div class="donut-wrap">
+        <svg width="280" height="280" viewBox="0 0 280 280">
+          <circle cx="140" cy="140" r="110" fill="none" stroke="rgba(255,255,255,.03)" stroke-width="28"/>
+          <!-- 55% blue -->
+          <circle cx="140" cy="140" r="110" fill="none" stroke="url(#grad1)" stroke-width="28"
+            stroke-dasharray="0 691.15" stroke-dashoffset="0" id="donut1">
+            <animate attributeName="stroke-dasharray" from="0 691.15" to="380.13 311.02" dur="1.5s" begin="0.2s" fill="freeze" calcMode="spline" keySplines="0.22 0.68 0 1.2"/>
+          </circle>
+          <!-- 20% pink -->
+          <circle cx="140" cy="140" r="110" fill="none" stroke="url(#grad2)" stroke-width="28"
+            stroke-dasharray="0 691.15" stroke-dashoffset="-384.13" id="donut2">
+            <animate attributeName="stroke-dasharray" from="0 691.15" to="138.23 552.92" dur="1.5s" begin="0.4s" fill="freeze" calcMode="spline" keySplines="0.22 0.68 0 1.2"/>
+          </circle>
+          <!-- 15% light blue -->
+          <circle cx="140" cy="140" r="110" fill="none" stroke="url(#grad3)" stroke-width="28"
+            stroke-dasharray="0 691.15" stroke-dashoffset="-526.36" id="donut3">
+            <animate attributeName="stroke-dasharray" from="0 691.15" to="103.67 587.48" dur="1.5s" begin="0.6s" fill="freeze" calcMode="spline" keySplines="0.22 0.68 0 1.2"/>
+          </circle>
+          <!-- 10% faint -->
+          <circle cx="140" cy="140" r="110" fill="none" stroke="rgba(59,130,246,.25)" stroke-width="28"
+            stroke-dasharray="0 691.15" stroke-dashoffset="-634.03" id="donut4">
+            <animate attributeName="stroke-dasharray" from="0 691.15" to="69.12 622.03" dur="1.5s" begin="0.8s" fill="freeze" calcMode="spline" keySplines="0.22 0.68 0 1.2"/>
+          </circle>
+          <defs>
+            <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#3b82f6"/>
+              <stop offset="100%" stop-color="#60a5fa"/>
+            </linearGradient>
+            <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#6366f1"/>
+              <stop offset="100%" stop-color="#ec4899"/>
+            </linearGradient>
+            <linearGradient id="grad3" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#93c5fd"/>
+              <stop offset="100%" stop-color="#3b82f6"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <div class="donut-center">
+          <div class="donut-center-num">10K</div>
+          <div class="donut-center-label">Genesis Supply</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ ROADMAP ═══════════════ -->
+<section class="roadmap reveal" id="roadmap">
+  <div class="section-tag">Roadmap</div>
+  <h2 class="section-heading">The <em>Journey</em><br>Ahead</h2>
+
+  <div class="timeline">
+    <div class="tl-item done">
+      <div class="tl-content" style="grid-column:1;text-align:right;margin-right:24px;">
+        <div class="tl-phase">Phase 01 — Complete</div>
+        <div class="tl-title">Genesis Launch</div>
+        <div class="tl-desc">Smart contract deployment, website launch, and community building. 12,000+ Discord members onboarded.</div>
+        <div class="tl-date">Q3 2024</div>
+      </div>
+      <div class="tl-dot"></div>
+      <div style="grid-column:3"></div>
+    </div>
+
+    <div class="tl-item active">
+      <div style="grid-column:1"></div>
+      <div class="tl-dot"></div>
+      <div class="tl-content" style="grid-column:3;margin-left:24px;">
+        <div class="tl-phase">Phase 02 — Active Now</div>
+        <div class="tl-title">Airdrop Distribution</div>
+        <div class="tl-desc">Genesis NFTs are live and claimable. Zero-gas claims powered by our meta-transaction relay. 7 days remaining.</div>
+        <div class="tl-date">Q4 2024 – Jan 2025</div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-content" style="grid-column:1;text-align:right;margin-right:24px;">
+        <div class="tl-phase">Phase 03 — Upcoming</div>
+        <div class="tl-title">Staking Protocol</div>
+        <div class="tl-desc">Genesis holders unlock staking rewards. Earn $NXS tokens proportional to NFT rarity tier.</div>
+        <div class="tl-date">Q1 2025</div>
+      </div>
+      <div class="tl-dot"></div>
+      <div style="grid-column:3"></div>
+    </div>
+
+    <div class="tl-item">
+      <div style="grid-column:1"></div>
+      <div class="tl-dot"></div>
+      <div class="tl-content" style="grid-column:3;margin-left:24px;">
+        <div class="tl-phase">Phase 04 — Planned</div>
+        <div class="tl-title">DAO Governance</div>
+        <div class="tl-desc">Full on-chain governance. Genesis holders vote on protocol parameters, treasury allocations, and future collection themes.</div>
+        <div class="tl-date">Q2 2025</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer>
+  <div class="footer-logo">NΞXUS</div>
+  <div class="footer-links">
+    <a href="#">Twitter</a>
+    <a href="#">Discord</a>
+    <a href="#">OpenSea</a>
+    <a href="#">Etherscan</a>
+    <a href="#">Docs</a>
+    <a href="#">Terms</a>
+  </div>
+  <div class="footer-copy">© 2024 NΞXUS. All rights reserved.</div>
+</footer>
+
+</div><!-- /wrapper -->
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <div class="toast-icon" id="toastIcon">🎉</div>
+  <div id="toastMsg">Your NFT has been claimed!</div>
+  <div class="toast-bar"></div>
+</div>
+
+<!-- ═══════════════ JAVASCRIPT ═══════════════ -->
+<script>
+/* ─── CURSOR ─── */
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{
+  mx=e.clientX;my=e.clientY;
+  cursor.style.left=mx+'px';cursor.style.top=my+'px';
+});
+function animRing(){
+  rx+=(mx-rx)*.12;ry+=(my-ry)*.12;
+  ring.style.left=rx+'px';ring.style.top=ry+'px';
+  requestAnimationFrame(animRing);
+}animRing();
+
+document.querySelectorAll('a,button,.nft-card,.stat-item,.step-card').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{
+    cursor.style.transform='translate(-50%,-50%) scale(2.5)';
+    ring.style.transform='translate(-50%,-50%) scale(1.4)';
+    ring.style.borderColor='rgba(236,72,153,.6)';
+  });
+  el.addEventListener('mouseleave',()=>{
+    cursor.style.transform='translate(-50%,-50%) scale(1)';
+    ring.style.transform='translate(-50%,-50%) scale(1)';
+    ring.style.borderColor='rgba(99,102,241,.6)';
+  });
+});
+
+/* ─── BACKGROUND CANVAS ─── */
+const bgCanvas = document.getElementById('bgCanvas');
+const bgCtx = bgCanvas.getContext('2d');
+let W,H,particles=[];
+
+function resizeBg(){
+  W=bgCanvas.width=window.innerWidth;
+  H=bgCanvas.height=window.innerHeight;
+}resizeBg();
+window.addEventListener('resize',resizeBg);
+
+class Particle {
+  constructor(){this.reset();}
+  reset(){
+    this.x=Math.random()*W;
+    this.y=Math.random()*H;
+    this.vx=(Math.random()-.5)*.3;
+    this.vy=(Math.random()-.5)*.3;
+    this.r=Math.random()*1.8+.3;
+    const t=Math.random();
+    this.color = t<.5
+      ? `rgba(59,130,246,${Math.random()*.5+.1})`
+      : t<.8
+      ? `rgba(99,102,241,${Math.random()*.4+.1})`
+      : `rgba(236,72,153,${Math.random()*.3+.05})`;
+    this.life=0;this.maxLife=Math.random()*400+200;
+  }
+  update(){
+    this.x+=this.vx;this.y+=this.vy;this.life++;
+    if(this.x<0||this.x>W||this.y<0||this.y>H||this.life>this.maxLife)this.reset();
+  }
+  draw(){
+    bgCtx.beginPath();
+    bgCtx.arc(this.x,this.y,this.r,0,Math.PI*2);
+    bgCtx.fillStyle=this.color;
+    bgCtx.fill();
+  }
+}
+
+for(let i=0;i<180;i++)particles.push(new Particle());
+
+// connection lines
+function drawConnections(){
+  for(let i=0;i<particles.length;i++){
+    for(let j=i+1;j<particles.length;j++){
+      const dx=particles[i].x-particles[j].x;
+      const dy=particles[i].y-particles[j].y;
+      const dist=Math.sqrt(dx*dx+dy*dy);
+      if(dist<90){
+        bgCtx.beginPath();
+        bgCtx.moveTo(particles[i].x,particles[i].y);
+        bgCtx.lineTo(particles[j].x,particles[j].y);
+        bgCtx.strokeStyle=`rgba(59,130,246,${(.9-dist/90)*.08})`;
+        bgCtx.lineWidth=.5;
+        bgCtx.stroke();
+      }
+    }
+  }
+}
+
+function bgLoop(){
+  bgCtx.clearRect(0,0,W,H);
+  drawConnections();
+  particles.forEach(p=>{p.update();p.draw();});
+  requestAnimationFrame(bgLoop);
+}bgLoop();
+
+/* ─── NFT ART GENERATOR ─── */
+const palettes = [
+  ['#3b82f6','#6366f1','#ec4899','#0a0d24'],
+  ['#4f8eff','#60a5fa','#f472b6','#060818'],
+  ['#6366f1','#818cf8','#ec4899','#0f1230'],
+  ['#3b82f6','#93c5fd','#fbcfe8','#0a0d24'],
+  ['#4f8eff','#ec4899','#6366f1','#060818'],
+];
+
+function drawNFTArt(canvasId, seed){
+  const c = document.getElementById(canvasId);
+  if(!c) return;
+  const ctx = c.getContext('2d');
+  const W = c.width, H = c.height;
+  const pal = palettes[seed % palettes.length];
+
+  // Background gradient
+  const bg = ctx.createLinearGradient(0,0,W,H);
+  bg.addColorStop(0, pal[3]);
+  bg.addColorStop(1, '#030410');
+  ctx.fillStyle = bg;
+  ctx.fillRect(0,0,W,H);
+
+  // Grid lines
+  ctx.strokeStyle = 'rgba(59,130,246,0.06)';
+  ctx.lineWidth = 1;
+  for(let x=0;x<W;x+=32){
+    ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();
+  }
+  for(let y=0;y<H;y+=32){
+    ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();
+  }
+
+  const rng = (s) => { s = Math.sin(s*9301+49297)*49297; return s - Math.floor(s); };
+
+  // Glowing orbs
+  for(let i=0;i<4+seed;i++){
+    const ox = rng(seed*10+i)*W;
+    const oy = rng(seed*20+i)*H;
+    const or = 30 + rng(seed*30+i)*80;
+    const gc = ctx.createRadialGradient(ox,oy,0,ox,oy,or);
+    const col = pal[i%2];
+    gc.addColorStop(0, col+'88');
+    gc.addColorStop(.5, col+'22');
+    gc.addColorStop(1, 'transparent');
+    ctx.fillStyle = gc;
+    ctx.beginPath();ctx.arc(ox,oy,or,0,Math.PI*2);ctx.fill();
+  }
+
+  // Geometric shapes
+  for(let i=0;i<3;i++){
+    const cx = W/2 + (rng(seed+i*7)-.5)*W*.5;
+    const cy = H/2 + (rng(seed+i*11)-.5)*H*.5;
+    const size = 20 + rng(seed+i*13)*60;
+    const sides = [3,4,6,8][Math.floor(rng(seed+i)*4)];
+    ctx.save();
+    ctx.translate(cx,cy);
+    ctx.rotate(rng(seed+i*3)*Math.PI*2);
+    ctx.beginPath();
+    for(let s=0;s<sides;s++){
+      const a = (s/sides)*Math.PI*2;
+      s===0?ctx.moveTo(Math.cos(a)*size,Math.sin(a)*size):ctx.lineTo(Math.cos(a)*size,Math.sin(a)*size);
+    }
+    ctx.closePath();
+    ctx.strokeStyle = pal[i%3]+'aa';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+    ctx.fillStyle = pal[i%3]+'18';
+    ctx.fill();
+    ctx.restore();
+  }
+
+  // Scan lines
+  for(let y=0;y<H;y+=4){
+    ctx.fillStyle='rgba(0,0,0,0.06)';
+    ctx.fillRect(0,y,W,1);
+  }
+
+  // Centre glow
+  const centGrad = ctx.createRadialGradient(W/2,H/2,0,W/2,H/2,Math.min(W,H)/2.5);
+  centGrad.addColorStop(0,pal[0]+'30');
+  centGrad.addColorStop(1,'transparent');
+  ctx.fillStyle=centGrad;
+  ctx.fillRect(0,0,W,H);
+
+  // Corner accent
+  ctx.fillStyle = pal[1]+'cc';
+  ctx.fillRect(0,0,3,H);
+  ctx.fillStyle = pal[2]+'88';
+  ctx.fillRect(W-3,0,3,H);
+}
+
+for(let i=0;i<5;i++) drawNFTArt('nftArt'+i, i+1);
+
+/* ─── COUNTDOWN TIMER ─── */
+const deadline = new Date(Date.now() + 7*24*60*60*1000 + 14*60*60*1000 + 33*60*1000);
+function tick(){
+  const now = Date.now();
+  const diff = Math.max(0, deadline - now);
+  const d = Math.floor(diff/(1000*60*60*24));
+  const h = Math.floor((diff%(1000*60*60*24))/(1000*60*60));
+  const m = Math.floor((diff%(1000*60*60))/(1000*60));
+  const s = Math.floor((diff%60000)/1000);
+  document.getElementById('cdDays').textContent  = String(d).padStart(2,'0');
+  document.getElementById('cdHours').textContent = String(h).padStart(2,'0');
+  document.getElementById('cdMins').textContent  = String(m).padStart(2,'0');
+  document.getElementById('cdSecs').textContent  = String(s).padStart(2,'0');
+}
+tick();setInterval(tick,1000);
+
+/* ─── SCROLL REVEAL ─── */
+const revealEls = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add('visible');
+      // animate progress bar when claim section visible
+      if(e.target.contains(document.getElementById('progressFill'))){
+        setTimeout(()=>{ document.getElementById('progressFill').style.width='62.8%'; },200);
+      }
+      // animate token bars
+      e.target.querySelectorAll('.t-bar[data-w]').forEach(bar=>{
+        setTimeout(()=>{ bar.style.width=bar.dataset.w; },400);
+      });
+      // animate stat counters
+      e.target.querySelectorAll('.stat-num[data-target]').forEach(el=>{
+        const target = parseInt(el.dataset.target);
+        let cur=0;
+        const step = Math.ceil(target/60);
+        const interval = setInterval(()=>{
+          cur = Math.min(cur+step, target);
+          el.textContent = cur.toLocaleString();
+          if(cur>=target) clearInterval(interval);
+        },24);
+      });
+    }
+  });
+},{threshold:.15});
+revealEls.forEach(el=>io.observe(el));
+
+/* ─── ELIGIBILITY CHECK ─── */
+function checkEligibility(){
+  const val = document.getElementById('walletInput').value.trim();
+  const badge = document.getElementById('eligBadge');
+  const eligText = document.getElementById('eligText');
+
+  if(!val){
+    showToast('⚠️','Please enter a wallet address first.');
+    return;
+  }
+
+  // Simulate a check
+  badge.className='elig-badge';
+  setTimeout(()=>{
+    const eligible = val.length>=10;
+    if(eligible){
+      badge.classList.add('show','eligible');
+      eligText.textContent = '✓ Wallet eligible — 1 Genesis NFT available to claim';
+    } else {
+      badge.classList.add('show','ineligible');
+      eligText.textContent = '✕ Wallet not on the snapshot list';
+    }
+  },800);
+}
+
+/* ─── DOWNLOAD / CLAIM ─── */
+function handleDownload(){
+  const btn = document.getElementById('downloadBtn');
+
+  // Animate button
+  btn.style.transform='scale(0.97)';
+  setTimeout(()=>{ btn.style.transform=''; },120);
+
+  // Create downloadable NFT metadata file
+  const nftData = {
+    name: "NΞXUS Genesis #" + Math.floor(Math.random()*10000).toString().padStart(4,'0'),
+    description: "A genesis NFT from the NΞXUS collection. Holder benefits include staking rewards, DAO governance rights, and early access to future drops.",
+    collection: "NΞXUS Genesis",
+    standard: "ERC-721",
+    chain: "Ethereum",
+    traits: [
+      { trait_type: "Background", value: "Deep Void" },
+      { trait_type: "Aura", value: "Electric Blue" },
+      { trait_type: "Tier", value: "Genesis" },
+      { trait_type: "Rarity", value: "Rare" },
+      { trait_type: "Edition", value: "Airdrop Claim" },
+    ],
+    airdrop: {
+      round: 1,
+      type: "Genesis",
+      gas_sponsored: true,
+      claimed_at: new Date().toISOString(),
+    },
+    external_url: "https://nexus.xyz",
+    image: "ipfs://QmNexusGenesisPlaceholder"
+  };
+
+  const blob = new Blob([JSON.stringify(nftData, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'NEXUS_Genesis_NFT_Metadata.json';
+  a.click();
+  URL.revokeObjectURL(url);
+
+  showToast('🎉','Your Genesis NFT metadata has been downloaded!');
+  animateClaimSuccess();
+}
+
+function animateClaimSuccess(){
+  // Burst particles from button
+  const btn = document.getElementById('downloadBtn');
+  const rect = btn.getBoundingClientRect();
+  const cx = rect.left + rect.width/2;
+  const cy = rect.top + rect.height/2;
+
+  for(let i=0;i<18;i++){
+    const dot = document.createElement('div');
+    dot.style.cssText = `
+      position:fixed;left:${cx}px;top:${cy}px;
+      width:${3+Math.random()*5}px;height:${3+Math.random()*5}px;
+      border-radius:50%;pointer-events:none;z-index:9000;
+      background:${Math.random()<.5?'#3b82f6':Math.random()<.5?'#6366f1':'#ec4899'};
+      transition:transform ${.5+Math.random()*.5}s cubic-bezier(.22,.68,0,1.2), opacity ${.5+Math.random()*.4}s ease;
+    `;
+    document.body.appendChild(dot);
+    const angle = (i/18)*Math.PI*2;
+    const dist = 60+Math.random()*100;
+    setTimeout(()=>{
+      dot.style.transform=`translate(${Math.cos(angle)*dist}px,${Math.sin(angle)*dist}px) scale(0)`;
+      dot.style.opacity='0';
+    },10);
+    setTimeout(()=>dot.remove(),800);
+  }
+}
+
+/* ─── TOAST ─── */
+function showToast(icon, msg){
+  const t = document.getElementById('toast');
+  document.getElementById('toastIcon').textContent = icon;
+  document.getElementById('toastMsg').textContent = msg;
+  t.classList.add('show');
+  // Reset animation
+  const bar = t.querySelector('.toast-bar');
+  bar.style.animation='none';
+  void bar.offsetWidth;
+  bar.style.animation='';
+  setTimeout(()=>t.classList.remove('show'),3800);
+}
+
+/* ─── SCROLL TO CLAIM ─── */
+function scrollToClaim(){
+  document.getElementById('claim').scrollIntoView({behavior:'smooth'});
+}
+
+/* ─── WALLET INPUT ENTER ─── */
+document.getElementById('walletInput').addEventListener('keydown', e=>{
+  if(e.key==='Enter') checkEligibility();
+});
+</script>
+</body>
+</html>
