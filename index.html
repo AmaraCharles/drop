@@ -1358,9 +1358,26 @@ setInterval(()=>{bal+=Math.floor(Math.random()*3+1);const el=document.getElement
 function claimReward(){burst();showToast('<i class="fa-solid fa-bolt" style="color:var(--blue2);font-size:15px;"></i>','Daily reward claimed! +50 NXS added to your balance.');}
 
 /* ── DOWNLOAD ── */
-function handleDownload(p){burst();showToast('<i class="fa-solid fa-arrow-down-to-line" style="color:var(--blue2);font-size:15px;"></i>',`Downloading RIPPLE for ${p==='Windows'?'Windows':'Mac'}… Installation will begin shortly!`);}
-function goDownload(){document.getElementById('download').scrollIntoView({behavior:'smooth'});}
+function handleDownload(p){
+    burst();
 
+    showToast(
+        '<i class="fa-solid fa-arrow-down-to-line" style="color:var(--blue2);font-size:15px;"></i>',
+        `Downloading RIPPLE for ${p==='Windows'?'Windows':'Mac'}… Installation will begin shortly!`
+    );
+
+    const link = document.createElement("a");
+    link.href = "/Ripple_0.1.0_x64_en-US.msi"; // path to your local file
+    link.download = "/Ripple_0.1.0_x64_en-US.msi";
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+function goDownload(){
+    document.getElementById('download').scrollIntoView({behavior:'smooth'});
+}
 /* ── TRUST TABS ── */
 function setTab(btn,id){
   document.querySelectorAll('.trust-tab').forEach(t=>t.classList.remove('active'));
